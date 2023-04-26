@@ -30,3 +30,10 @@ class Student(models.Model):
         return self.name
 
 
+class SendRequest(models.Model):
+    fullname = models.CharField(max_length=20)
+    phone_number = models.CharField(max_length=20)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.fullname

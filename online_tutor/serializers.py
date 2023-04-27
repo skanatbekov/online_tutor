@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from .models import Category, Mentor, Student, SendRequest
+from .models import User, Category, Mentor, Student, SendRequest
+
+
+class UserRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
 
 class CategorySerializer(serializers.ModelSerializer):

@@ -36,7 +36,6 @@ class Student(models.Model):
     mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-
     def __str__(self):
         return self.name
 

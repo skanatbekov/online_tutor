@@ -1,13 +1,5 @@
 from django.db import models
-
-
-class User(models.Model):
-    username = models.CharField(max_length=64, unique=True)
-    password = models.CharField(max_length=64)
-    is_staff = models.BooleanField()
-
-    def __str__(self):
-        return self.username
+from django.contrib.auth.models import User
 
 
 class Course(models.Model):
@@ -24,7 +16,7 @@ class Mentor(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     experience = models.CharField(max_length=50)
     rate = models.IntegerField()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='mentor')
 
     def __str__(self):
         return self.name

@@ -30,6 +30,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = djuser(username=validated_data['username'])
         user.set_password(validated_data['password'])
+        if user.username.startswith('tutor.'):
+            user.is_staff = True
+        else:
+            user.is_staff = False
+
+        if user.username.startswith('admin.'):
+            user.is_superuser = True
+        else:
+            user.is_superuser = False
         user.save()
         return user
 

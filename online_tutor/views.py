@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .permissions import IsPermitted
+from .permissions import IsPermitted, IsPermittedObj, IsSuper
 from .models import Course, Mentor, Student
 from .serializers import UserRegisterSerializer, CourseSerializer, MentorSerializer, StudentSerializer
 
@@ -13,14 +13,14 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     authentication_classes = [TokenAuthentication, ]
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsSuper, ]
 
 
 class MentorViewSet(viewsets.ModelViewSet):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     authentication_classes = [TokenAuthentication, ]
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsPermitted, IsPermittedObj, ]
 
 
 class StudentListCreateAPIView(mixins.CreateModelMixin, mixins.ListModelMixin, generics.GenericAPIView):

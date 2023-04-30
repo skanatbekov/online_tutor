@@ -6,11 +6,15 @@ from . import views
 
 urlpatterns = [
     path('course/', views.CourseViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('course/<int:pk>/', views.CourseViewSet.as_view(
+        {'get': 'retrieve', 'put': 'update', 'delete': 'destroy', 'patch': 'partial_update'})),
 
     path('mentor/', views.MentorViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('mentor/<int:pk>/', views.MentorViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy', 'patch': 'partial_update'})),
+    path('mentor/<int:pk>/', views.MentorViewSet.as_view(
+        {'get': 'retrieve', 'put': 'update', 'delete': 'destroy', 'patch': 'partial_update'})),
 
-    path('student/', views.StudentListCreateAPIView.as_view()),
+    path('student/', views.StudentListAPIView.as_view()),
+    path('student/create/', views.StudentCreateAPIView.as_view()),
     path('student/<int:pk>/', views.StudentRetrieveUpdateDestroyAPIView.as_view()),
 
     path('register/', views.user_register),

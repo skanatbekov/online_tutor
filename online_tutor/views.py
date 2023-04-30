@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .permissions import IsPermitted, IsPermittedObj, IsSuper
+from .permissions import IsPermitted, IsPermittedObj, IsSuper, IsSuperObj
 from .models import Course, Mentor, Student
 from .serializers import UserRegisterSerializer, CourseSerializer, MentorSerializer, StudentSerializer
 
@@ -13,7 +13,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     authentication_classes = [TokenAuthentication, ]
-    permission_classes = [IsSuper, ]
+    permission_classes = [IsSuper, IsSuperObj]
 
 
 class MentorViewSet(viewsets.ModelViewSet):
@@ -23,12 +23,19 @@ class MentorViewSet(viewsets.ModelViewSet):
     permission_classes = [IsPermitted, IsPermittedObj, ]
 
 
-class StudentListCreateAPIView(mixins.CreateModelMixin, mixins.ListModelMixin, generics.GenericAPIView):
+class StudentListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class StudentCreateAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -38,7 +45,7 @@ class StudentRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.Upda
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     authentication_classes = [TokenAuthentication, ]
-    permission_classes = [IsPermitted, ]
+    permission_classes = [IsPermittedObj, ]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

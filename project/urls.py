@@ -40,5 +40,6 @@ doc_urlpatterns = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('online_tutor.urls')),
+    path('auth/', include('rest_framework.urls')),
 
 ] + doc_urlpatterns

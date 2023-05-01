@@ -19,6 +19,5 @@ urlpatterns = [
 
     path('register/', views.user_register),
     path('auth_token/', auth_views.obtain_auth_token),
-    path('auth/', include('rest_framework.urls')),
 
 ]

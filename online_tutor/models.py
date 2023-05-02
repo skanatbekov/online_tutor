@@ -17,6 +17,7 @@ class Mentor(models.Model):
     experience = models.CharField(max_length=50)
     rate = models.IntegerField()
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='mentor')
+    avatar = models.ImageField(default='profile/default-avatar.png', upload_to='profile')
 
     def __str__(self):
         return self.name

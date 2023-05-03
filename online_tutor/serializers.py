@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 from django.contrib.auth import password_validation as pv
 from django.contrib.auth.models import User as djuser
 
@@ -50,6 +49,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class MentorSerializer(serializers.ModelSerializer):
+    course = serializers.StringRelatedField(source='course.name')
 
     class Meta:
         model = Mentor

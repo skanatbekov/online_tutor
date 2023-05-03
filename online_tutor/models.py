@@ -20,7 +20,7 @@ class Mentor(models.Model):
     avatar = models.ImageField(default='profile/default-avatar.png', upload_to='profile')
 
     def __str__(self):
-        return self.name
+        return self.course.name
 
 
 class Student(models.Model):

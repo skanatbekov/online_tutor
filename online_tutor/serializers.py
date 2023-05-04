@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth import password_validation as pv
+from django.contrib.auth import password_validation as pv, authenticate
 from django.contrib.auth.models import User as djuser
 
 from .models import User, Course, Mentor, Student, SendRequest
@@ -43,6 +43,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    mentors = serializers.ReadOnlyField(source='get_mentors')
+
     class Meta:
         model = Course
         fields = '__all__'
@@ -62,7 +64,8 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SendRequestSerializer(serializers.ModelSerializer):
+class StudentSendRequestSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = SendRequest
         fields = '__all__'

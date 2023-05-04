@@ -9,6 +9,10 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+    def get_mentors(self):
+        mentors = Mentor.objects.filter(course_id=self.id).values()
+        return mentors
+
 
 class Mentor(models.Model):
     name = models.CharField(max_length=20)
@@ -20,7 +24,7 @@ class Mentor(models.Model):
     avatar = models.ImageField(default='profile/default-avatar.png', upload_to='profile')
 
     def __str__(self):
-        return self.course.name
+        return self.name
 
 
 class Student(models.Model):

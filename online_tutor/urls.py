@@ -18,6 +18,7 @@ urlpatterns = [
     path('student/', views.StudentListAPIView.as_view()),
     path('student/create/', views.StudentCreateAPIView.as_view()),
     path('student/<int:pk>/', views.StudentRetrieveUpdateDestroyAPIView.as_view()),
+    path('student/request/', views.StudentSendRequestAPIView.as_view()),
 
     path('register/', views.user_register),
     path('auth_token/', auth_views.obtain_auth_token)

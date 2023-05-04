@@ -6,9 +6,9 @@ from . import views
 
 urlpatterns = [
     path('course/', views.CourseListAPIView.as_view()),
-    path('course/create', views.CourseCreateAPIView.as_view()),
-    path('course/<int:pk>/detail', views.CourseRetrieveAPIView.as_view()),
-    path('course/<int:pk>', views.CourseUpdateDestroyAPIView.as_view()),
+    path('course/create/', views.CourseCreateAPIView.as_view()),
+    path('course/<int:pk>/detail/', views.CourseRetrieveAPIView.as_view()),
+    path('course/<int:pk>/', views.CourseUpdateDestroyAPIView.as_view()),
 
     path('mentor/', views.MentorListAPIView.as_view()),
     path('mentor/create/', views.MentorCreateAPIView.as_view()),

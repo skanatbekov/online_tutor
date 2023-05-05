@@ -3,7 +3,7 @@ from rest_framework import viewsets, status, mixins, generics, permissions, view
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import filters, pagination
+from rest_framework import filters
 
 
 from .permissions import IsPermitted, IsPermittedObj, IsSuper, IsSuperObj
@@ -12,17 +12,12 @@ from .serializers import UserRegisterSerializer, CourseSerializer, MentorSeriali
     StudentSendRequestSerializer
 
 
-class CourseMentorStudentPagination(pagination.PageNumberPagination):
-    page_size = 2
-
-
 class CourseListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'description']
     ordering_fields = ['name', ]
-    pagination_class = CourseMentorStudentPagination
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -63,9 +58,8 @@ class MentorListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', 'course']
+    search_fields = ['name', 'experience']
     ordering_fields = ['rate', ]
-    pagination_class = CourseMentorStudentPagination
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -108,9 +102,8 @@ class StudentListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsPermitted, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', 'course']
+    search_fields = ['name', ]
     ordering_fields = ['birth_date', ]
-    pagination_class = CourseMentorStudentPagination
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

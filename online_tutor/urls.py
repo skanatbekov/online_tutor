@@ -20,7 +20,7 @@ urlpatterns = [
     path('student/<int:pk>/', views.StudentRetrieveUpdateDestroyAPIView.as_view()),
     path('student/request/', views.StudentSendRequestAPIView.as_view()),
 
-    path('register/', views.user_register),
+    path('register/', views.UserRegisterAPIView.as_view()),
     path('auth_token/', auth_views.obtain_auth_token)
 
 ]

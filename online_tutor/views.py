@@ -1,12 +1,12 @@
-from django.contrib.auth import login
+from django.contrib.auth.models import User
 from rest_framework import viewsets, status, mixins, generics, permissions, views
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.authtoken.models import Token
 from rest_framework import filters
 
 
-from .permissions import IsPermitted, IsPermittedObj, IsSuper, IsSuperObj
+from .permissions import IsPermitted, IsSuper
 from .models import Course, Mentor, Student, SendRequest
 from .serializers import UserRegisterSerializer, CourseSerializer, MentorSerializer, StudentSerializer, \
     StudentSendRequestSerializer
@@ -45,7 +45,7 @@ class CourseUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMix
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsSuperObj, ]
+    permission_classes = [IsSuper, ]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -87,7 +87,7 @@ class MentorUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMix
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsSuperObj, ]
+    permission_classes = [IsPermitted, ]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -121,7 +121,7 @@ class StudentRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.Upda
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsPermittedObj, ]
+    permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -141,10 +141,13 @@ class StudentSendRequestAPIView(mixins.CreateModelMixin, generics.GenericAPIView
         return self.create(request, *args, **kwargs)
 
 
-@api_view(http_method_names=['POST', ])
-def user_register(request):
-    serializer = UserRegisterSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserRegisterAPIView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})

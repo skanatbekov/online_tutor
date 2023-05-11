@@ -5,15 +5,15 @@ from rest_framework.authtoken import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('course/', views.CourseListAPIView.as_view()),
-    path('course/create/', views.CourseCreateAPIView.as_view()),
-    path('course/<int:pk>/detail/', views.CourseRetrieveAPIView.as_view()),
-    path('course/<int:pk>/', views.CourseUpdateDestroyAPIView.as_view()),
+    path('course/', views.CourseListCreateAPIView.as_view()),
+    path('course/create/', views.CourseListCreateAPIView.as_view()),
+    path('course/<int:pk>/detail/', views.CourseRetrieveUpdateDestroyAPIView.as_view()),
+    path('course/<int:pk>/', views.CourseRetrieveUpdateDestroyAPIView.as_view()),
 
-    path('mentor/', views.MentorListAPIView.as_view()),
-    path('mentor/create/', views.MentorCreateAPIView.as_view()),
-    path('mentor/<int:pk>/detail/', views.MentorRetrieveAPIView.as_view()),
-    path('mentor/<int:pk>/', views.MentorUpdateDestroyAPIView.as_view()),
+    path('mentor/', views.MentorListCreateAPIView.as_view()),
+    path('mentor/create/', views.MentorListCreateAPIView.as_view()),
+    path('mentor/<int:pk>/detail/', views.MentorRetrieveUpdateDestroyAPIView.as_view()),
+    path('mentor/<int:pk>/', views.MentorRetrieveUpdateDestroyAPIView.as_view()),
 
     path('student/', views.StudentListAPIView.as_view()),
     path('student/create/', views.StudentCreateAPIView.as_view()),

@@ -48,11 +48,10 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
-        read_only_fields = ['user', ]
 
 
 class MentorSerializer(serializers.ModelSerializer):
-    course = serializers.StringRelatedField(source='course.name')
+    course = serializers.SlugRelatedField(slug_field='name', queryset=Course.objects.all())
 
     class Meta:
         model = Mentor

@@ -4,7 +4,7 @@ from rest_framework.authentication import TokenAuthentication, SessionAuthentica
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import filters
-
+from rest_framework.permissions import IsAuthenticated
 
 from .permissions import IsPermitted, IsSuper
 from .models import Course, Mentor, Student, SendRequest
@@ -12,9 +12,11 @@ from .serializers import UserRegisterSerializer, CourseSerializer, MentorSeriali
     StudentSendRequestSerializer
 
 
-class CourseListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
+class CourseListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsSuper, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'description']
     ordering_fields = ['name', ]
@@ -22,30 +24,18 @@ class CourseListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-
-class CourseCreateAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsSuper, ]
-
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
 
-class CourseRetrieveAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
+class CourseRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsSuper, ]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-
-
-class CourseUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsSuper, ]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -54,9 +44,11 @@ class CourseUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMix
         return self.destroy(request, *args, **kwargs)
 
 
-class MentorListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
+class MentorListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsPermitted, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'experience']
     ordering_fields = ['rate', ]
@@ -64,30 +56,21 @@ class MentorListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-
-class MentorCreateAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset = Mentor.objects.all()
-    serializer_class = MentorSerializer
-    authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsPermitted, ]
-
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
-class MentorRetrieveAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
+
+class MentorRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-
-
-class MentorUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
-    queryset = Mentor.objects.all()
-    serializer_class = MentorSerializer
-    authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsPermitted, ]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -99,7 +82,7 @@ class MentorUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMix
 class StudentListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    authentication_classes = [SessionAuthentication, ]
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsPermitted, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', ]
@@ -112,15 +95,20 @@ class StudentListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
 class StudentCreateAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated, ]
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class StudentRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    authentication_classes = [SessionAuthentication, ]
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):

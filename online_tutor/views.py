@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets, status, mixins, generics, permissions, views
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from rest_framework import mixins, generics
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import filters
@@ -15,7 +15,7 @@ from .serializers import UserRegisterSerializer, CourseSerializer, MentorSeriali
 class CourseListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsSuper, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'description']
@@ -31,7 +31,7 @@ class CourseListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, ge
 class CourseRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsSuper, ]
 
     def get(self, request, *args, **kwargs):
@@ -47,7 +47,7 @@ class CourseRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.Updat
 class MentorListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsPermitted, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'experience']
@@ -66,7 +66,7 @@ class MentorListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, ge
 class MentorRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):
@@ -82,7 +82,7 @@ class MentorRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.Updat
 class StudentListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsPermitted, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', ]
@@ -95,7 +95,7 @@ class StudentListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
 class StudentCreateAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsAuthenticated, ]
 
     def post(self, request, *args, **kwargs):
@@ -108,7 +108,7 @@ class StudentCreateAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
 class StudentRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [SessionAuthentication, ]
     permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):

@@ -16,7 +16,7 @@ class CourseListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, ge
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsSuper, ]
+    # permission_classes = [IsSuper, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'description']
     ordering_fields = ['name', ]
@@ -32,7 +32,7 @@ class CourseRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.Updat
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsSuper, ]
+    # permission_classes = [IsSuper, ]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -48,7 +48,7 @@ class MentorListCreateAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, ge
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsPermitted, ]
+    # permission_classes = [IsPermitted, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'experience']
     ordering_fields = ['rate', ]
@@ -67,7 +67,7 @@ class MentorRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.Updat
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsPermitted, ]
+    # permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -83,7 +83,7 @@ class StudentListAPIView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsPermitted, ]
+    # permission_classes = [IsPermitted, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', ]
     ordering_fields = ['birth_date', ]
@@ -96,7 +96,7 @@ class StudentCreateAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsAuthenticated, ]
+    # permission_classes = [IsAuthenticated, ]
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -109,7 +109,7 @@ class StudentRetrieveUpdateDestroyAPIView(mixins.RetrieveModelMixin, mixins.Upda
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     authentication_classes = [SessionAuthentication, ]
-    permission_classes = [IsPermitted, ]
+    # permission_classes = [IsPermitted, ]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
